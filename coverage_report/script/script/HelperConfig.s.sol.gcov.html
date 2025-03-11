@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - lcov.info - script/script/HelperConfig.s.sol</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">script/script</a> - HelperConfig.s.sol<span style="font-size: 80%;"> (source / <a href="HelperConfig.s.sol.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">lcov.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryMed">75.0&nbsp;%</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">12</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2025-03-05 13:32:54</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">66.7&nbsp;%</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">2</td>
+          </tr>
+                  <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // SPDX-License-Identifier: MIT</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span>              : pragma solidity ^0.8.18;</span>
+<span id="L4"><span class="lineNum">       4</span>              : </span>
+<span id="L5"><span class="lineNum">       5</span>              : import {Script} from &quot;forge-std/Script.sol&quot;;</span>
+<span id="L6"><span class="lineNum">       6</span>              : import {MockV3Aggregator} from &quot;../test/mocks/MockV3Aggregator.sol&quot;;</span>
+<span id="L7"><span class="lineNum">       7</span>              : import {ERC20Mock} from &quot;@openzeppelin/contracts/mocks/token/ERC20Mock.sol&quot;;</span>
+<span id="L8"><span class="lineNum">       8</span>              : </span>
+<span id="L9"><span class="lineNum">       9</span>              : contract HelperConfig is Script {</span>
+<span id="L10"><span class="lineNum">      10</span>              :     struct NetworkConfig {</span>
+<span id="L11"><span class="lineNum">      11</span>              :         address wethUsdPriceFeed;</span>
+<span id="L12"><span class="lineNum">      12</span>              :         address wbtcPriceFeed;</span>
+<span id="L13"><span class="lineNum">      13</span>              :         address weth;</span>
+<span id="L14"><span class="lineNum">      14</span>              :         address wbtc;</span>
+<span id="L15"><span class="lineNum">      15</span>              :         uint256 deployerKey;</span>
+<span id="L16"><span class="lineNum">      16</span>              :     }</span>
+<span id="L17"><span class="lineNum">      17</span>              : </span>
+<span id="L18"><span class="lineNum">      18</span>              :     uint8 public constant DECIMALS = 8;</span>
+<span id="L19"><span class="lineNum">      19</span>              :     int256 public constant ETH_USD_PRICE = 2000e18;</span>
+<span id="L20"><span class="lineNum">      20</span>              :     int256 public constant BTC_USD_PRICE = 1000e18;</span>
+<span id="L21"><span class="lineNum">      21</span>              :     uint256 public DEFAULT_ANVIL_PRIVATE_KEY = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;</span>
+<span id="L22"><span class="lineNum">      22</span>              :     NetworkConfig public activeNetworkConfig;</span>
+<span id="L23"><span class="lineNum">      23</span>              : </span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC tlaBgGNC">           6 :     constructor() {</span></span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           6 :         if (block.chainid == 11155111) {</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaUNC tlaBgUNC">           0 :             activeNetworkConfig = getSepoliaEThConfig();</span></span>
+<span id="L27"><span class="lineNum">      27</span>              :         } else {</span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC tlaBgGNC">           6 :             activeNetworkConfig = getOrCreateAnvilEthConfig();</span></span>
+<span id="L29"><span class="lineNum">      29</span>              :         }</span>
+<span id="L30"><span class="lineNum">      30</span>              :     }</span>
+<span id="L31"><span class="lineNum">      31</span>              : </span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaUNC tlaBgUNC">           0 :     function getSepoliaEThConfig() public view returns (NetworkConfig memory) {</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaUNC">           0 :         return NetworkConfig({</span></span>
+<span id="L34"><span class="lineNum">      34</span>              :             wethUsdPriceFeed: 0x694AA1769357215DE4FAC081bf1f309aDC325306,</span>
+<span id="L35"><span class="lineNum">      35</span>              :             wbtcPriceFeed: 0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43,</span>
+<span id="L36"><span class="lineNum">      36</span>              :             weth: 0xdd13E55209Fd76AfE204dBda4007C227904f0a81,</span>
+<span id="L37"><span class="lineNum">      37</span>              :             wbtc: 0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063,</span>
+<span id="L38"><span class="lineNum">      38</span>              :             deployerKey: vm.envUint(&quot;PRIVATE_KEY&quot;)</span>
+<span id="L39"><span class="lineNum">      39</span>              :         });</span>
+<span id="L40"><span class="lineNum">      40</span>              :     }</span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC tlaBgGNC">           6 :     function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory anvilNetworkConfig) {</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           6 :         if (activeNetworkConfig.wethUsdPriceFeed != address(0)) {</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaUNC tlaBgUNC">           0 :             return activeNetworkConfig;</span></span>
+<span id="L45"><span class="lineNum">      45</span>              :         }</span>
+<span id="L46"><span class="lineNum">      46</span>              : </span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC tlaBgGNC">           6 :         vm.startBroadcast();</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           6 :         MockV3Aggregator ethUsdPriceFeed = new MockV3Aggregator(DECIMALS, ETH_USD_PRICE);</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           6 :         ERC20Mock wethMock = new ERC20Mock();</span></span>
+<span id="L50"><span class="lineNum">      50</span>              : </span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">           6 :         MockV3Aggregator btcUsdPriceFeed = new MockV3Aggregator(DECIMALS, ETH_USD_PRICE);</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           6 :         ERC20Mock wbtcMock = new ERC20Mock();</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           6 :         vm.stopBroadcast();</span></span>
+<span id="L54"><span class="lineNum">      54</span>              : </span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           6 :         anvilNetworkConfig = NetworkConfig({</span></span>
+<span id="L56"><span class="lineNum">      56</span>              :             wethUsdPriceFeed: address(ethUsdPriceFeed),</span>
+<span id="L57"><span class="lineNum">      57</span>              :             wbtcPriceFeed: address(btcUsdPriceFeed),</span>
+<span id="L58"><span class="lineNum">      58</span>              :             weth: address(wethMock),</span>
+<span id="L59"><span class="lineNum">      59</span>              :             wbtc: address(wbtcMock),</span>
+<span id="L60"><span class="lineNum">      60</span>              :             deployerKey: DEFAULT_ANVIL_PRIVATE_KEY</span>
+<span id="L61"><span class="lineNum">      61</span>              :         });</span>
+<span id="L62"><span class="lineNum">      62</span>              :     }</span>
+<span id="L63"><span class="lineNum">      63</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
