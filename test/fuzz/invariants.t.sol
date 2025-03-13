@@ -9,7 +9,6 @@ import {DeployDSCEngine} from "../../script/DeployDSCEngine.s.sol";
 import {DecentralizedStableCoin} from "../../src/DecentralizedStablecoin.sol";
 import {HelperConfig} from "../../script/HelperConfig.s.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
-import {MockV3Aggregator} from "../mocks/MockV3Aggregator.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/interfaces/IERC20.sol";
 import {Handler} from "./Handler.t.sol";
 
@@ -42,7 +41,14 @@ contract invariantTest is StdInvariant, Test {
         console.log("wethValue: ", wethValue);
         console.log("wbtcValue: ", wbtcValue);
         console.log("totalSupply: ", totalSupply);
+        console.log("TimesMintCalled: ", handler.timesMintIsCalled());
 
         assert(wethValue + wbtcValue >= totalSupply);
+    }
+
+    function invariant_gettersShouldNotRevert() public view {
+        engine.getLiquidationBonus();
+        engine.getAccountCollateralValue(msg.sender);
+        engine.getHealthFactor(msg.sender);
     }
 }
